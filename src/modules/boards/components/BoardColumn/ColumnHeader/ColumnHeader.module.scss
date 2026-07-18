@@ -1,0 +1,66 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 32px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.title h2 {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 24px;
+  height: 24px;
+
+  padding: 0 6px;
+
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.collapseButton,
+.menuButton {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  border-radius: 4px;
+}
+
+.collapseButton:hover,
+.menuButton:hover {
+  background: #e2e3e7;
+}

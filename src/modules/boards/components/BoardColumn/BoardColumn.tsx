@@ -1,36 +1,61 @@
 import { useState } from "react";
 
 import type { BoardColumn as BoardColumnType } from "@/types/column";
-import type { CreateCardFormValues } from "@/modules/boards/types/cardForm.types";
+
 import { TaskCard } from "@/modules/boards/components/TaskCard";
+import { ColumnHeader } from "@/modules/boards/components/BoardColumn/ColumnHeader/ColumnHeader";
+import { CollapsedColumnHeader } from "@/modules/boards/components/BoardColumn/CollapsedColumnHeader/CollapsedColumnHeader";
 
 import styles from "./BoardColumn.module.scss";
-import { CreateCardModal } from "@/modules/boards/components//CreateCardModal/CreateCardModal";
 
 interface BoardColumnProps {
   column: BoardColumnType;
-  onAddCard: (columnId: string, data: CreateCardFormValues) => void;
+  onOpenCreateCardModal: (columnId: string) => void;
 }
 
-export const BoardColumn = ({ column, onAddCard }: BoardColumnProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const BoardColumn = ({
+  column,
+  onOpenCreateCardModal,
+}: BoardColumnProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleCollapse = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
   return (
-    <div className={styles.column}>
-      <h2>{column.title}</h2>
+    <div
+      className={`${styles.column} ${isCollapsed ? styles.collapsed : ""}`}
+      onClick={isCollapsed ? toggleCollapse : undefined}
+    >
+      {isCollapsed ? (
+        <CollapsedColumnHeader
+          title={column.title}
+          count={column.cards.length}
+        />
+      ) : (
+        <>
+          <ColumnHeader
+            title={column.title}
+            count={column.cards.length}
+            onCollapse={toggleCollapse}
+          />
 
-      {column.cards.map((card) => (
-        <TaskCard key={card.id} card={card} />
-      ))}
+          <div className={styles.cardsWrapper}>
+            <div className={styles.cards}>
+              {column.cards.map((card) => (
+                <TaskCard key={card.id} card={card} />
+              ))}
+            </div>
 
-      <button onClick={() => setIsModalOpen(true)}>Add Card</button>
-
-      <CreateCardModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreate={(data) => {
-          onAddCard(column.id, data);
-        }}
-      />
+            <div className={styles.footer}>
+              <button onClick={() => onOpenCreateCardModal(column.id)}>
+                Add Card
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

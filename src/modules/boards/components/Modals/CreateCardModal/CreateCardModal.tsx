@@ -21,8 +21,6 @@ export const CreateCardModal = ({
       onCreate(values);
 
       form.resetFields();
-
-      onClose();
     } catch (error) {
       console.log(`Validation failed : ${error}`);
     }
@@ -44,7 +42,10 @@ export const CreateCardModal = ({
         layout="vertical"
         onFinish={handleSubmit}
         onKeyDown={(event) => {
-          if (event.key === "Enter") {
+          if (
+            event.key === "Enter" &&
+            event.target instanceof HTMLInputElement
+          ) {
             handleSubmit();
           }
         }}

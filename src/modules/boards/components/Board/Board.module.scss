@@ -1,5 +1,33 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boardContainer {
+  padding-bottom: 16px;
+}
+
 .board {
   display: flex;
+
   gap: 16px;
-  overflow-x: auto;
+
+  align-items: flex-start;
+}
+
+.addColumn {
+  width: 280px;
+  min-width: 280px;
+  height: 120px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
 }

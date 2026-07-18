@@ -1,12 +1,64 @@
 .column {
+  width: 280px;
+  min-width: 280px;
+
+  max-height: 600px;
+
   display: flex;
   flex-direction: column;
 
-  width: 280px;
-  min-height: 200px;
+  gap: 8px;
+
+  padding: 12px;
 
   background: #ebecf0;
+
   border-radius: 8px;
 
-  padding: 16px;
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease;
+}
+
+.cardsWrapper {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0;
+}
+
+.cards {
+  overflow-y: auto;
+
+  scrollbar-gutter: stable;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  padding-right: 8px;
+
+  max-height: 460px;
+}
+
+.footer {
+  flex-shrink: 0;
+
+  padding-top: 12px;
+}
+
+.collapsed {
+  width: 50px;
+  min-width: 50px;
+
+  cursor: pointer;
+
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease;
+}
+
+.collapsed:hover {
+  background: #e2e3e7;
 }

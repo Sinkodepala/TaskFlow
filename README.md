@@ -1,75 +1,101 @@
-# React + TypeScript + Vite
+# TaskFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TaskFlow — это мини-менеджер задач в стиле Trello, созданный для практики разработки современных React-приложений.
 
-Currently, two official plugins are available:
+Приложение позволяет создавать доски, колонки и карточки задач, управлять состоянием через Redux Toolkit и работать с интерфейсом через Ant Design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Demo
 
-## React Compiler
+https://task-flow-theta-one.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshots
 
-## Expanding the ESLint configuration
+(добавить позже)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React
+- TypeScript
+- Vite
+- React Router
+- Redux Toolkit
+- Ant Design
+- SCSS Modules
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Tools
 
+- ESLint
+- Prettier
+- Git
+- Vercel
+
+## Features
+
+- Создание и отображение досок
+- Работа с колонками задач
+- Создание карточек через модальное окно
+- Валидация форм
+- Управление состоянием через Redux Toolkit
+- Типизация данных с TypeScript
+- Адаптивная структура компонентов
+
+## Project Structure
+
+```text
+src
+├── app          # конфигурация приложения
+├── components   # переиспользуемые компоненты
+├── layouts      # общие шаблоны страниц
+├── modules      # функциональные модули приложения
+├── pages        # страницы приложения
+├── router       # маршрутизация
+├── store        # Redux store
+├── styles       # глобальные стили
+└── types        # TypeScript типы
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Installation
 
+Clone repository:
+
+```bash
+git clone https://github.com/ТВОЙ_GITHUB/taskflow.git
 ```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run development server:
+
+```bash
+npm run dev
+```
+
+Build project:
+
+```bash
+npm run build
+```
+## Future Improvements
+
+- Просмотр деталей карточки
+- Редактирование задач
+- Удаление задач
+- Drag & Drop между колонками
+- Темная тема
+- Адаптивная версия
+- Страница списка досок
+- Настройки пользователя
+
+## Author
+
+**Amir**  
+Frontend Developer
