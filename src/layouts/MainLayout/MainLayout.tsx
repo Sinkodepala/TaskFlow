@@ -24,7 +24,7 @@ export const MainLayout = () => {
       onCollapse={handleCollapse}
       />
 
-      <Layout className={styles.layout}>
+      <Layout className={styles.main}>
         <Header collapsed={collapsed} onToggleSidebar={toggleSidebar}/>
 
         <Content className={styles.content}>

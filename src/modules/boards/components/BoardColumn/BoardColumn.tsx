@@ -11,11 +11,13 @@ import styles from "./BoardColumn.module.scss";
 interface BoardColumnProps {
   column: BoardColumnType;
   onOpenCreateCardModal: (columnId: string) => void;
+  onOpenCardDetails: (cardId: string) => void;
 }
 
 export const BoardColumn = ({
   column,
   onOpenCreateCardModal,
+  onOpenCardDetails,
 }: BoardColumnProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -44,13 +46,21 @@ export const BoardColumn = ({
           <div className={styles.cardsWrapper}>
             <div className={styles.cards}>
               {column.cards.map((card) => (
-                <TaskCard key={card.id} card={card} />
+                <TaskCard
+                  key={card.id}
+                  card={card}
+                  onOpenDetails={onOpenCardDetails}
+                />
               ))}
             </div>
 
             <div className={styles.footer}>
-              <button onClick={() => onOpenCreateCardModal(column.id)}>
-                Add Card
+              <button
+                className={styles.addCard}
+                type="button"
+                onClick={() => onOpenCreateCardModal(column.id)}
+              >
+                + Add Card
               </button>
             </div>
           </div>
