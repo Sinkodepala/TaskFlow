@@ -1,3 +1,6 @@
+import { Dropdown } from "antd";
+import type { MenuProps } from "antd";
+
 import { CollapseIcon } from "@/modules/boards/components/ui/CollapseIcon/CollapseIcon";
 
 import styles from "./ColumnHeader.module.scss";
@@ -6,13 +9,37 @@ interface ColumnHeaderProps {
   title: string;
   count: number;
   onCollapse: () => void;
+  onRename: () => void;
+  onDelete: () => void;
 }
 
 export const ColumnHeader = ({
   title,
   count,
   onCollapse,
+  onRename,
+  onDelete,
 }: ColumnHeaderProps) => {
+  const menuItems: MenuProps["items"] = [
+    {
+      key: "rename",
+      label: "Переименовать",
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        onRename();
+      },
+    },
+    {
+      key: "delete",
+      label: "Удалить",
+      danger: true,
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        onDelete();
+      },
+    },
+  ];
+
   return (
     <div className={styles.header}>
       <div className={styles.title}>
@@ -22,10 +49,18 @@ export const ColumnHeader = ({
         <span className={styles.count}>{count}</span>
 
         <button className={styles.collapseButton} onClick={onCollapse}>
-          <CollapseIcon collapsed={false}/>
+          <CollapseIcon collapsed={false} />
         </button>
 
-        <button className={styles.menuButton}>⋮</button>
+        <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+          <button
+            className={styles.menuButton}
+            type="button"
+            onClick={(event) => event.stopPropagation()}
+          >
+            ⋮
+          </button>
+        </Dropdown>
       </div>
     </div>
   );

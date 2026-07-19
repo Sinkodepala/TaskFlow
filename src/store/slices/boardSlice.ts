@@ -6,7 +6,9 @@ import type {
   AddCardPayload,
   AddColumnPayload,
   DeleteCardPayload,
+  DeleteColumnPayload,
   UpdateCardPayload,
+  UpdateColumnTitlePayload,
 } from "./board.types";
 
 interface BoardState {
@@ -38,6 +40,35 @@ const boardSlice = createSlice({
       );
 
       board?.columns.push(column);
+    },
+
+    updateColumnTitle(state, action: PayloadAction<UpdateColumnTitlePayload>) {
+      const { boardId, columnId, title } = action.payload;
+      const board = state.workspace.boards.find(
+        (board) => board.id === boardId,
+      );
+      const column = board?.columns.find((column) => column.id === columnId);
+
+      if (!column) return;
+
+      column.title = title;
+    },
+
+    deleteColumn(state, action: PayloadAction<DeleteColumnPayload>) {
+      const { boardId, columnId } = action.payload;
+      const board = state.workspace.boards.find(
+        (board) => board.id === boardId,
+      );
+
+      if (!board) return;
+
+      const columnIndex = board.columns.findIndex(
+        (column) => column.id === columnId,
+      );
+
+      if (columnIndex === -1) return;
+
+      board.columns.splice(columnIndex, 1);
     },
 
     // Card
@@ -116,7 +147,14 @@ const boardSlice = createSlice({
   },
 });
 
-export const { setWorkspace, addColumn, addCard, updateCard, deleteCard } =
-  boardSlice.actions;
+export const {
+  setWorkspace,
+  addColumn,
+  updateColumnTitle,
+  deleteColumn,
+  addCard,
+  updateCard,
+  deleteCard,
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

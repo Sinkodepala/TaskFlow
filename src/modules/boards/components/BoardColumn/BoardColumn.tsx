@@ -12,12 +12,16 @@ interface BoardColumnProps {
   column: BoardColumnType;
   onOpenCreateCardModal: (columnId: string) => void;
   onOpenCardDetails: (cardId: string) => void;
+  onOpenRenameColumn: (columnId: string) => void;
+  onOpenDeleteColumn: (columnId: string) => void;
 }
 
 export const BoardColumn = ({
   column,
   onOpenCreateCardModal,
   onOpenCardDetails,
+  onOpenRenameColumn,
+  onOpenDeleteColumn,
 }: BoardColumnProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -41,6 +45,8 @@ export const BoardColumn = ({
             title={column.title}
             count={column.cards.length}
             onCollapse={toggleCollapse}
+            onRename={() => onOpenRenameColumn(column.id)}
+            onDelete={() => onOpenDeleteColumn(column.id)}
           />
 
           <div className={styles.cardsWrapper}>
@@ -60,7 +66,7 @@ export const BoardColumn = ({
                 type="button"
                 onClick={() => onOpenCreateCardModal(column.id)}
               >
-                + Add Card
+                + Добавить карточку
               </button>
             </div>
           </div>

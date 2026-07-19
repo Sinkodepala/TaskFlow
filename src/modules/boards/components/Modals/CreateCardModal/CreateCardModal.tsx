@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Select } from "antd";
+import { Modal, Form, Input, Select, DatePicker } from "antd";
 
 import type { CreateCardFormValues } from "@/modules/boards/types/cardForm.types";
 
@@ -34,8 +34,12 @@ export const CreateCardModal = ({
     <Modal
       open={open}
       onCancel={handleClose}
-      title="Create card"
+      title="Создать карточку"
       onOk={handleSubmit}
+      okText="Создать"
+      cancelText="Отмена"
+      destroyOnHidden
+      focusTriggerAfterClose={false}
     >
       <Form
         form={form}
@@ -52,7 +56,7 @@ export const CreateCardModal = ({
       >
         <Form.Item
           name="title"
-          label="Title"
+          label="Название"
           rules={[
             {
               required: true,
@@ -60,17 +64,24 @@ export const CreateCardModal = ({
             },
           ]}
         >
-          <Input />
+          <Input autoFocus />
         </Form.Item>
-        <Form.Item name="description" label="Description">
+        <Form.Item name="description" label="Описание">
           <Input.TextArea onPressEnter={(event) => event.stopPropagation()} />
         </Form.Item>
-        <Form.Item name="priority" label="Priority" initialValue="medium">
+        <Form.Item name="priority" label="Приоритет" initialValue="medium">
           <Select>
-            <Select.Option value="low">Low</Select.Option>
-            <Select.Option value="medium">Medium</Select.Option>
-            <Select.Option value="high">High</Select.Option>
+            <Select.Option value="low">Низкий</Select.Option>
+            <Select.Option value="medium">Средний</Select.Option>
+            <Select.Option value="high">Высокий</Select.Option>
           </Select>
+        </Form.Item>
+        <Form.Item name="dueDate" label="Дедлайн">
+          <DatePicker
+            style={{ width: "100%" }}
+            showTime={{ format: "HH:mm" }}
+            format="DD.MM.YYYY HH:mm"
+          />
         </Form.Item>
       </Form>
     </Modal>

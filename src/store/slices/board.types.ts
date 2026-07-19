@@ -29,3 +29,14 @@ export interface AddColumnPayload {
   boardId: string;
   column: BoardColumn;
 }
+
+export interface UpdateColumnTitlePayload {
+  boardId: string;
+  columnId: string;
+  title: string;
+}
+
+export interface DeleteColumnPayload {
+  boardId: string;
+  columnId: string;
+}

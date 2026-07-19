@@ -9,15 +9,15 @@ interface PriorityTagProps {
 const priorityConfig = {
   low: {
     color: "green",
-    label: "Low",
+    label: "Низкий",
   },
   medium: {
     color: "orange",
-    label: "Medium",
+    label: "Средний",
   },
   high: {
     color: "red",
-    label: "High",
+    label: "Высокий",
   },
 };
 

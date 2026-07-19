@@ -10,7 +10,7 @@ export const createCard = (data: CreateCardFormValues): TaskCard => {
     description: data.description,
     status: "todo",
     priority: data.priority,
-    dueDate: "",
+    dueDate: data.dueDate ? data.dueDate.format("YYYY-MM-DDTHH:mm") : "",
     createdAt: now,
     updatedAt: now,
   };

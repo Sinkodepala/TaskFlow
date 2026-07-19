@@ -5,6 +5,7 @@ export interface CreateCardFormValues {
   title: string;
   description: string;
   priority: TaskPriority;
+  dueDate: Dayjs | null;
 }
 
 export interface EditCardFormValues {

@@ -1,25 +1,34 @@
+import { useEffect } from "react";
 import { Modal, Form, Input } from "antd";
 
-import type { CreateColumnFormValues } from "@/modules/boards/types/columnForm.types";
+import type { RenameColumnFormValues } from "@/modules/boards/types/columnForm.types";
 
-interface CreateColumnModalProps {
+interface RenameColumnModalProps {
   open: boolean;
+  initialTitle: string;
   onClose: () => void;
-  onCreate: (data: CreateColumnFormValues) => void;
+  onRename: (data: RenameColumnFormValues) => void;
 }
 
-export const CreateColumnModal = ({
+export const RenameColumnModal = ({
   open,
+  initialTitle,
   onClose,
-  onCreate,
-}: CreateColumnModalProps) => {
-  const [form] = Form.useForm<CreateColumnFormValues>();
+  onRename,
+}: RenameColumnModalProps) => {
+  const [form] = Form.useForm<RenameColumnFormValues>();
+
+  useEffect(() => {
+    if (!open) return;
+
+    form.setFieldsValue({ title: initialTitle });
+  }, [open, initialTitle, form]);
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
 
-      onCreate(values);
+      onRename(values);
 
       form.resetFields();
     } catch (error) {
@@ -36,9 +45,9 @@ export const CreateColumnModal = ({
     <Modal
       open={open}
       onCancel={handleClose}
-      title="Создать колонку"
+      title="Переименовать колонку"
       onOk={handleSubmit}
-      okText="Создать"
+      okText="Сохранить"
       cancelText="Отмена"
       destroyOnHidden
       focusTriggerAfterClose={false}

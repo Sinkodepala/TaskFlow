@@ -8,10 +8,12 @@ export const BoardPage = () => {
     handleUpdateCard,
     handleDeleteCard,
     handleAddColumn,
+    handleRenameColumn,
+    handleDeleteColumn,
   } = useBoard();
 
   if (!board) {
-    return <div>Board not found</div>;
+    return <div>Доска не найдена</div>;
   }
 
   return (
@@ -21,6 +23,8 @@ export const BoardPage = () => {
       onUpdateCard={handleUpdateCard}
       onDeleteCard={handleDeleteCard}
       onAddColumn={handleAddColumn}
+      onRenameColumn={handleRenameColumn}
+      onDeleteColumn={handleDeleteColumn}
     />
   );
 };

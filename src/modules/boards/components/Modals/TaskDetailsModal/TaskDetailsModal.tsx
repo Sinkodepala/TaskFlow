@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import dayjs from "dayjs";
 
@@ -6,6 +6,7 @@ import type { TaskCard } from "@/types/card";
 import type { BoardColumn } from "@/types/column";
 import type { EditCardFormValues } from "@/modules/boards/types/cardForm.types";
 import { PriorityTag } from "@/modules/boards/components/TaskCard/PriorityTag/PriorityTag";
+import { getDueDateStatus } from "@/modules/boards/utils/getDueDateStatus";
 
 import styles from "./TaskDetailsModal.module.scss";
 
@@ -32,6 +33,22 @@ const formatDate = (value: string) => {
   });
 };
 
+const formatDateTime = (value: string) => {
+  if (!value) return "—";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 export const TaskDetailsModal = ({
   open,
   card,
@@ -42,6 +59,7 @@ export const TaskDetailsModal = ({
 }: TaskDetailsModalProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm<EditCardFormValues>();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const currentColumnId =
     columns.find((column) =>
@@ -94,24 +112,34 @@ export const TaskDetailsModal = ({
     <Modal
       open={open}
       onCancel={handleClose}
-      title={isEditing ? "Edit card" : (card?.title ?? "Task details")}
+      title={isEditing ? "Редактировать карточку" : (card?.title ?? "Детали задачи")}
       destroyOnHidden
+      focusTriggerAfterClose={false}
+      afterOpenChange={(isOpen) => {
+        if (isOpen && !isEditing) {
+          contentRef.current?.focus();
+        }
+      }}
       footer={
         card
           ? isEditing
             ? [
                 <Button key="cancel" onClick={handleCancelEdit}>
-                  Cancel
+                  Отмена
                 </Button>,
                 <Button key="save" type="primary" onClick={handleSave}>
-                  Save
+                  Сохранить
                 </Button>,
               ]
             : [
                 <Button key="delete" danger onClick={onDelete}>
                   Удалить
                 </Button>,
-                <Button key="edit" type="primary" onClick={() => setIsEditing(true)}>
+                <Button
+                  key="edit"
+                  type="primary"
+                  onClick={() => setIsEditing(true)}
+                >
                   Редактировать
                 </Button>,
               ]
@@ -120,22 +148,10 @@ export const TaskDetailsModal = ({
     >
       {card &&
         (isEditing ? (
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSave}
-            onKeyDown={(event) => {
-              if (
-                event.key === "Enter" &&
-                event.target instanceof HTMLInputElement
-              ) {
-                handleSave();
-              }
-            }}
-          >
+          <Form form={form} layout="vertical" onFinish={handleSave}>
             <Form.Item
               name="title"
-              label="Title"
+              label="Название"
               rules={[
                 {
                   required: true,
@@ -146,23 +162,21 @@ export const TaskDetailsModal = ({
               <Input />
             </Form.Item>
 
-            <Form.Item name="description" label="Description">
-              <Input.TextArea
-                onPressEnter={(event) => event.stopPropagation()}
-              />
+            <Form.Item name="description" label="Описание">
+              <Input.TextArea />
             </Form.Item>
 
-            <Form.Item name="priority" label="Priority">
+            <Form.Item name="priority" label="Приоритет">
               <Select>
-                <Select.Option value="low">Low</Select.Option>
-                <Select.Option value="medium">Medium</Select.Option>
-                <Select.Option value="high">High</Select.Option>
+                <Select.Option value="low">Низкий</Select.Option>
+                <Select.Option value="medium">Средний</Select.Option>
+                <Select.Option value="high">Высокий</Select.Option>
               </Select>
             </Form.Item>
 
             <Form.Item
               name="columnId"
-              label="Status"
+              label="Статус"
               rules={[
                 {
                   required: true,
@@ -179,44 +193,60 @@ export const TaskDetailsModal = ({
               </Select>
             </Form.Item>
 
-            <Form.Item name="dueDate" label="Due date">
-              <DatePicker style={{ width: "100%" }} format="DD.MM.YYYY" />
+            <Form.Item name="dueDate" label="Дедлайн">
+              <DatePicker
+                style={{ width: "100%" }}
+                showTime={{ format: "HH:mm" }}
+                format="DD.MM.YYYY HH:mm"
+              />
             </Form.Item>
           </Form>
         ) : (
-          <div className={styles.content}>
+          <div ref={contentRef} className={styles.content} tabIndex={-1}>
             <div className={styles.field}>
-              <span className={styles.label}>Description</span>
+              <span className={styles.label}>Описание</span>
               <p className={styles.value}>
-                {card.description || "No description"}
+                {card.description || "Нет описания"}
               </p>
             </div>
 
             <div className={styles.row}>
               <div className={styles.field}>
-                <span className={styles.label}>Priority</span>
+                <span className={styles.label}>Приоритет</span>
                 <PriorityTag priority={card.priority} />
               </div>
 
               <div className={styles.field}>
-                <span className={styles.label}>Status</span>
+                <span className={styles.label}>Статус</span>
                 <p className={styles.value}>{currentColumnTitle}</p>
               </div>
             </div>
 
             <div className={styles.field}>
-              <span className={styles.label}>Due date</span>
-              <p className={styles.value}>{formatDate(card.dueDate)}</p>
+              <span className={styles.label}>Дедлайн</span>
+              <p
+                className={`${styles.value} ${
+                  card.dueDate
+                    ? {
+                        overdue: styles.valueOverdue,
+                        soon: styles.valueSoon,
+                        normal: "",
+                      }[getDueDateStatus(card.dueDate)]
+                    : ""
+                }`}
+              >
+                {formatDateTime(card.dueDate)}
+              </p>
             </div>
 
             <div className={styles.row}>
               <div className={styles.field}>
-                <span className={styles.label}>Created</span>
+                <span className={styles.label}>Создано</span>
                 <p className={styles.value}>{formatDate(card.createdAt)}</p>
               </div>
 
               <div className={styles.field}>
-                <span className={styles.label}>Updated</span>
+                <span className={styles.label}>Обновлено</span>
                 <p className={styles.value}>{formatDate(card.updatedAt)}</p>
               </div>
             </div>

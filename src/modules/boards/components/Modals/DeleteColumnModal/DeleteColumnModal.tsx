@@ -1,26 +1,28 @@
 import { useRef } from "react";
 import { Modal } from "antd";
 
-interface DeleteTaskModalProps {
+interface DeleteColumnModalProps {
   open: boolean;
-  cardTitle: string;
+  columnTitle: string;
+  cardsCount: number;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-export const DeleteTaskModal = ({
+export const DeleteColumnModal = ({
   open,
-  cardTitle,
+  columnTitle,
+  cardsCount,
   onClose,
   onConfirm,
-}: DeleteTaskModalProps) => {
+}: DeleteColumnModalProps) => {
   const contentRef = useRef<HTMLParagraphElement>(null);
 
   return (
     <Modal
       open={open}
       onCancel={onClose}
-      title="Удалить карточку"
+      title="Удалить колонку"
       okText="Удалить"
       cancelText="Отмена"
       okType="danger"
@@ -34,7 +36,9 @@ export const DeleteTaskModal = ({
       }}
     >
       <p ref={contentRef} tabIndex={-1} style={{ outline: "none" }}>
-        Удалить карточку &quot;{cardTitle}&quot;? Это действие нельзя отменить.
+        Удалить колонку &quot;{columnTitle}&quot; и {cardsCount}{" "}
+        {cardsCount === 1 ? "карточку" : "карточек"}? Это действие нельзя
+        отменить.
       </p>
     </Modal>
   );

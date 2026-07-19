@@ -45,8 +45,22 @@
 
 .date {
   font-size: 12px;
-
+  line-height: 1.4;
   color: #888;
+}
+
+.dateOverdue {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #ffccc7;
+  color: #a8071a;
+}
+
+.dateSoon {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #fff1b8;
+  color: #ad6800;
 }
 
 .priority {

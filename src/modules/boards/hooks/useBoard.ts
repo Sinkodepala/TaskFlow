@@ -4,7 +4,9 @@ import {
   addCard,
   addColumn,
   deleteCard,
+  deleteColumn,
   updateCard,
+  updateColumnTitle,
 } from "@/store/slices/boardSlice";
 import { createCard } from "@/modules/boards/utils/createCard";
 import { createColumn } from "@/modules/boards/utils/createColumn";
@@ -14,7 +16,10 @@ import type {
   CreateCardFormValues,
   EditCardFormValues,
 } from "@/modules/boards/types/cardForm.types";
-import type { CreateColumnFormValues } from "@/modules/boards/types/columnForm.types";
+import type {
+  CreateColumnFormValues,
+  RenameColumnFormValues,
+} from "@/modules/boards/types/columnForm.types";
 
 export const useBoard = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +59,7 @@ export const useBoard = () => {
           title: data.title,
           description: data.description,
           priority: data.priority,
-          dueDate: data.dueDate ? data.dueDate.format("YYYY-MM-DD") : "",
+          dueDate: data.dueDate ? data.dueDate.format("YYYY-MM-DDTHH:mm") : "",
           status: getStatusForColumnTitle(
             targetColumn.title,
             currentCard.status,
@@ -86,11 +91,39 @@ export const useBoard = () => {
     );
   };
 
+  const handleRenameColumn = (
+    columnId: string,
+    data: RenameColumnFormValues,
+  ) => {
+    if (!board) return;
+
+    dispatch(
+      updateColumnTitle({
+        boardId: board.id,
+        columnId,
+        title: data.title,
+      }),
+    );
+  };
+
+  const handleDeleteColumn = (columnId: string) => {
+    if (!board) return;
+
+    dispatch(
+      deleteColumn({
+        boardId: board.id,
+        columnId,
+      }),
+    );
+  };
+
   return {
     board,
     handleNewCard,
     handleUpdateCard,
     handleDeleteCard,
     handleAddColumn,
+    handleRenameColumn,
+    handleDeleteColumn,
   };
 };

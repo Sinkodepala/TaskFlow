@@ -3,10 +3,15 @@ import type {
   CreateCardFormValues,
   EditCardFormValues,
 } from "@/modules/boards/types/cardForm.types";
-import type { CreateColumnFormValues } from "@/modules/boards/types/columnForm.types";
+import type {
+  CreateColumnFormValues,
+  RenameColumnFormValues,
+} from "@/modules/boards/types/columnForm.types";
 import { BoardColumn } from "@/modules/boards/components/BoardColumn/BoardColumn";
 import { CreateCardModal } from "@/modules/boards/components/Modals/CreateCardModal/CreateCardModal";
 import { CreateColumnModal } from "@/modules/boards/components/Modals/CreateColumnModal/CreateColumnModal";
+import { RenameColumnModal } from "@/modules/boards/components/Modals/RenameColumnModal/RenameColumnModal";
+import { DeleteColumnModal } from "@/modules/boards/components/Modals/DeleteColumnModal/DeleteColumnModal";
 import { DeleteTaskModal } from "@/modules/boards/components/Modals/DeleteTaskModal/DeleteTaskModal";
 import { TaskDetailsModal } from "@/modules/boards/components/Modals/TaskDetailsModal/TaskDetailsModal";
 import { useBoardModals } from "@/modules/boards/hooks/useBoardModals";
@@ -19,6 +24,8 @@ interface BoardProps {
   onUpdateCard: (cardId: string, data: EditCardFormValues) => void;
   onDeleteCard: (cardId: string) => void;
   onAddColumn: (data: CreateColumnFormValues) => void;
+  onRenameColumn: (columnId: string, data: RenameColumnFormValues) => void;
+  onDeleteColumn: (columnId: string) => void;
 }
 
 export const Board = ({
@@ -27,6 +34,8 @@ export const Board = ({
   onUpdateCard,
   onDeleteCard,
   onAddColumn,
+  onRenameColumn,
+  onDeleteColumn,
 }: BoardProps) => {
   const {
     isCreateCardOpen,
@@ -42,6 +51,12 @@ export const Board = ({
     isCreateColumnOpen,
     openCreateColumnModal,
     closeCreateColumnModal,
+    isRenameColumnOpen,
+    openRenameColumnModal,
+    closeRenameColumnModal,
+    isDeleteColumnOpen,
+    openDeleteColumnModal,
+    closeDeleteColumnModal,
   } = useBoardModals();
 
   const selectedCard =
@@ -49,12 +64,22 @@ export const Board = ({
       .flatMap((column) => column.cards)
       .find((card) => card.id === selectedCardId) ?? null;
 
-  const handleConfirmDelete = () => {
+  const selectedColumn =
+    board.columns.find((column) => column.id === selectedColumnId) ?? null;
+
+  const handleConfirmDeleteCard = () => {
     if (!selectedCardId) return;
 
     onDeleteCard(selectedCardId);
     closeDeleteCardModal();
     closeTaskDetailsModal();
+  };
+
+  const handleConfirmDeleteColumn = () => {
+    if (!selectedColumnId) return;
+
+    onDeleteColumn(selectedColumnId);
+    closeDeleteColumnModal();
   };
 
   return (
@@ -72,6 +97,8 @@ export const Board = ({
               column={column}
               onOpenCreateCardModal={openCreateCardModal}
               onOpenCardDetails={openTaskDetailsModal}
+              onOpenRenameColumn={openRenameColumnModal}
+              onOpenDeleteColumn={openDeleteColumnModal}
             />
           ))}
 
@@ -79,7 +106,7 @@ export const Board = ({
             className={styles.addColumn}
             onClick={openCreateColumnModal}
           >
-            + Add Column
+            + Добавить колонку
           </button>
         </div>
       </div>
@@ -105,6 +132,26 @@ export const Board = ({
         }}
       />
 
+      <RenameColumnModal
+        open={isRenameColumnOpen}
+        initialTitle={selectedColumn?.title ?? ""}
+        onClose={closeRenameColumnModal}
+        onRename={(data) => {
+          if (!selectedColumnId) return;
+
+          onRenameColumn(selectedColumnId, data);
+          closeRenameColumnModal();
+        }}
+      />
+
+      <DeleteColumnModal
+        open={isDeleteColumnOpen}
+        columnTitle={selectedColumn?.title ?? ""}
+        cardsCount={selectedColumn?.cards.length ?? 0}
+        onClose={closeDeleteColumnModal}
+        onConfirm={handleConfirmDeleteColumn}
+      />
+
       <TaskDetailsModal
         open={selectedCard !== null}
         card={selectedCard}
@@ -118,7 +165,7 @@ export const Board = ({
         open={isDeleteCardOpen}
         cardTitle={selectedCard?.title ?? ""}
         onClose={closeDeleteCardModal}
-        onConfirm={handleConfirmDelete}
+        onConfirm={handleConfirmDeleteCard}
       />
     </div>
   );
