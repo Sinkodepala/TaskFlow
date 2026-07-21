@@ -40,3 +40,17 @@ export interface DeleteColumnPayload {
   boardId: string;
   columnId: string;
 }
+
+export interface MoveCardPayload {
+  boardId: string;
+  cardId: string;
+  sourceColumnId: string;
+  targetColumnId: string;
+  targetIndex: number;
+}
+
+export interface MoveColumnPayload {
+  boardId: string;
+  columnId: string;
+  targetIndex: number;
+}

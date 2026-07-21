@@ -2,6 +2,8 @@
   width: 280px;
   min-width: 280px;
   max-height: 100%;
+  height: fit-content;
+  align-self: flex-start;
 
   display: flex;
   flex-direction: column;
@@ -18,7 +20,14 @@
 
   transition:
     width 0.2s ease,
-    min-width 0.2s ease;
+    min-width 0.2s ease,
+    outline-color 0.15s ease;
+}
+
+.dropTarget {
+  // Draw inside the column so parent overflow (board edges / header) cannot clip it.
+  outline: 2px solid #2684ff;
+  outline-offset: -2px;
 }
 
 .cardsWrapper {
@@ -30,10 +39,13 @@
 }
 
 .cards {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
 
   overflow-y: auto;
+  // Prevent browser scroll anchoring from compounding upward scroll
+  // when the blue placeholder reorders cards during drag.
+  overflow-anchor: none;
 
   display: flex;
   flex-direction: column;
@@ -43,10 +55,18 @@
   padding-right: 8px;
 }
 
+.cardSlot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
 .footer {
   flex-shrink: 0;
-
-  padding-top: 12px;
 }
 
 .addCard {
@@ -90,11 +110,15 @@
   width: 50px;
   min-width: 50px;
 
-  cursor: pointer;
+  cursor: grab;
 
   transition:
     width 0.2s ease,
     min-width 0.2s ease;
+}
+
+.collapsed:active {
+  cursor: grabbing;
 }
 
 .collapsed:hover {

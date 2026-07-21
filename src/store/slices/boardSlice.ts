@@ -2,11 +2,14 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import type { Workspace } from "@/types/workspace";
 import { mockWorkspace } from "@/modules/boards/mock/boards.mock";
+import { getStatusForColumnTitle } from "@/modules/boards/utils/getStatusForColumnTitle";
 import type {
   AddCardPayload,
   AddColumnPayload,
   DeleteCardPayload,
   DeleteColumnPayload,
+  MoveCardPayload,
+  MoveColumnPayload,
   UpdateCardPayload,
   UpdateColumnTitlePayload,
 } from "./board.types";
@@ -144,6 +147,82 @@ const boardSlice = createSlice({
         }
       }
     },
+
+    moveCard(state, action: PayloadAction<MoveCardPayload>) {
+      const {
+        boardId,
+        cardId,
+        sourceColumnId,
+        targetColumnId,
+        targetIndex,
+      } = action.payload;
+      const board = state.workspace.boards.find(
+        (board) => board.id === boardId,
+      );
+
+      if (!board) return;
+
+      const sourceColumn = board.columns.find(
+        (column) => column.id === sourceColumnId,
+      );
+      const targetColumn = board.columns.find(
+        (column) => column.id === targetColumnId,
+      );
+
+      if (!sourceColumn || !targetColumn) return;
+
+      const sourceIndex = sourceColumn.cards.findIndex(
+        (card) => card.id === cardId,
+      );
+
+      if (sourceIndex === -1) return;
+
+      const [card] = sourceColumn.cards.splice(sourceIndex, 1);
+
+      if (!card) return;
+
+      const insertIndex = Math.max(
+        0,
+        Math.min(targetIndex, targetColumn.cards.length),
+      );
+
+      const movedCard =
+        sourceColumnId === targetColumnId
+          ? { ...card, updatedAt: new Date().toISOString() }
+          : {
+              ...card,
+              status: getStatusForColumnTitle(targetColumn.title, card.status),
+              updatedAt: new Date().toISOString(),
+            };
+
+      targetColumn.cards.splice(insertIndex, 0, movedCard);
+    },
+
+    moveColumn(state, action: PayloadAction<MoveColumnPayload>) {
+      const { boardId, columnId, targetIndex } = action.payload;
+      const board = state.workspace.boards.find(
+        (board) => board.id === boardId,
+      );
+
+      if (!board) return;
+
+      const sourceIndex = board.columns.findIndex(
+        (column) => column.id === columnId,
+      );
+
+      if (sourceIndex === -1) return;
+
+      const [column] = board.columns.splice(sourceIndex, 1);
+
+      if (!column) return;
+
+      const insertIndex = Math.max(
+        0,
+        Math.min(targetIndex, board.columns.length),
+      );
+
+      board.columns.splice(insertIndex, 0, column);
+    },
   },
 });
 
@@ -155,6 +234,7 @@ export const {
   addCard,
   updateCard,
   deleteCard,
+  moveCard,
+  moveColumn,
 } = boardSlice.actions;
-
 export default boardSlice.reducer;

@@ -13,7 +13,7 @@ export const CollapsedColumnHeader = ({
 }: CollapsedColumnHeaderProps) => {
   return (
     <div className={styles.collapsedHeader}>
-      <button className={styles.collapseButton}>
+      <button className={styles.collapseButton} type="button">
         <CollapseIcon collapsed={true} />
       </button>
 

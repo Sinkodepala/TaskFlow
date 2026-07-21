@@ -19,6 +19,19 @@
   transform: translateY(-2px);
 }
 
+.cardOverlay {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  transform: rotate(2deg) scale(1.03);
+  cursor: grabbing;
+  width: 256px;
+  opacity: 0.55;
+}
+
+.cardOverlay:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  transform: rotate(2deg) scale(1.03);
+}
+
 .header {
   margin-bottom: 8px;
 }

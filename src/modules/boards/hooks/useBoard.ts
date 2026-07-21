@@ -5,6 +5,8 @@ import {
   addColumn,
   deleteCard,
   deleteColumn,
+  moveCard,
+  moveColumn,
   updateCard,
   updateColumnTitle,
 } from "@/store/slices/boardSlice";
@@ -117,6 +119,37 @@ export const useBoard = () => {
     );
   };
 
+  const handleMoveCard = (
+    cardId: string,
+    sourceColumnId: string,
+    targetColumnId: string,
+    targetIndex: number,
+  ) => {
+    if (!board) return;
+
+    dispatch(
+      moveCard({
+        boardId: board.id,
+        cardId,
+        sourceColumnId,
+        targetColumnId,
+        targetIndex,
+      }),
+    );
+  };
+
+  const handleMoveColumn = (columnId: string, targetIndex: number) => {
+    if (!board) return;
+
+    dispatch(
+      moveColumn({
+        boardId: board.id,
+        columnId,
+        targetIndex,
+      }),
+    );
+  };
+
   return {
     board,
     handleNewCard,
@@ -125,5 +158,7 @@ export const useBoard = () => {
     handleAddColumn,
     handleRenameColumn,
     handleDeleteColumn,
+    handleMoveCard,
+    handleMoveColumn,
   };
 };

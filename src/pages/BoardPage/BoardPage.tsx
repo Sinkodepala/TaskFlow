@@ -10,6 +10,8 @@ export const BoardPage = () => {
     handleAddColumn,
     handleRenameColumn,
     handleDeleteColumn,
+    handleMoveCard,
+    handleMoveColumn,
   } = useBoard();
 
   if (!board) {
@@ -25,6 +27,8 @@ export const BoardPage = () => {
       onAddColumn={handleAddColumn}
       onRenameColumn={handleRenameColumn}
       onDeleteColumn={handleDeleteColumn}
+      onMoveCard={handleMoveCard}
+      onMoveColumn={handleMoveColumn}
     />
   );
 };

@@ -6,7 +6,8 @@ import styles from "./TaskCard.module.scss";
 
 interface TaskCardProps {
   card: TaskCardType;
-  onOpenDetails: (cardId: string) => void;
+  onOpenDetails?: (cardId: string) => void;
+  variant?: "default" | "overlay";
 }
 
 const formatDueDate = (value: string) => {
@@ -29,11 +30,23 @@ const dueDateStatusClass: Record<string, string | undefined> = {
   normal: undefined,
 };
 
-export const TaskCard = ({ card, onOpenDetails }: TaskCardProps) => {
+export const TaskCard = ({
+  card,
+  onOpenDetails,
+  variant = "default",
+}: TaskCardProps) => {
   const dueStatus = card.dueDate ? getDueDateStatus(card.dueDate) : null;
+  const isOverlay = variant === "overlay";
 
   return (
-    <div className={styles.card} onClick={() => onOpenDetails(card.id)}>
+    <div
+      className={`${styles.card} ${isOverlay ? styles.cardOverlay : ""}`}
+      onClick={
+        isOverlay || !onOpenDetails
+          ? undefined
+          : () => onOpenDetails(card.id)
+      }
+    >
       <div className={styles.header}>
         <h3 className={styles.title}>{card.title}</h3>
       </div>
