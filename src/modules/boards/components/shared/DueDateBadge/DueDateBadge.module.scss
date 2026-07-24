@@ -1,0 +1,21 @@
+.badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #888;
+}
+
+.overdue {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #ffccc7;
+  color: #a8071a;
+}
+
+.soon {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #fff1b8;
+  color: #ad6800;
+}

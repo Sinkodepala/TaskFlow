@@ -1,5 +1,5 @@
 import { Board } from "@/modules/boards/components/Board/Board";
-import { useBoard } from "@/modules/boards/hooks/useBoard";
+import { useBoard } from "@/modules/boards/hooks/board/useBoard";
 
 export const BoardPage = () => {
   const {
@@ -10,8 +10,6 @@ export const BoardPage = () => {
     handleAddColumn,
     handleRenameColumn,
     handleDeleteColumn,
-    handleMoveCard,
-    handleMoveColumn,
   } = useBoard();
 
   if (!board) {
@@ -21,14 +19,16 @@ export const BoardPage = () => {
   return (
     <Board
       board={board}
-      onAddCard={handleNewCard}
-      onUpdateCard={handleUpdateCard}
-      onDeleteCard={handleDeleteCard}
-      onAddColumn={handleAddColumn}
-      onRenameColumn={handleRenameColumn}
-      onDeleteColumn={handleDeleteColumn}
-      onMoveCard={handleMoveCard}
-      onMoveColumn={handleMoveColumn}
+      cardActions={{
+        onAdd: handleNewCard,
+        onUpdate: handleUpdateCard,
+        onDelete: handleDeleteCard,
+      }}
+      columnActions={{
+        onAdd: handleAddColumn,
+        onRename: handleRenameColumn,
+        onDelete: handleDeleteColumn,
+      }}
     />
   );
 };

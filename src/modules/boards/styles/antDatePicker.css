@@ -1,0 +1,8 @@
+/* Time panel: last hour/minute stays at bottom when scrolled fully */
+.ant-picker-time-panel-column {
+  padding-bottom: 0 !important;
+}
+
+.ant-picker-time-panel-column::after {
+  display: none !important;
+}

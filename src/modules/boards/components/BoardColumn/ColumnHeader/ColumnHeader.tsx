@@ -1,4 +1,3 @@
-import type { HTMLAttributes } from "react";
 import { Dropdown } from "antd";
 import type { MenuProps } from "antd";
 
@@ -12,7 +11,6 @@ interface ColumnHeaderProps {
   onCollapse: () => void;
   onRename: () => void;
   onDelete: () => void;
-  dragHandleProps?: HTMLAttributes<HTMLDivElement>;
 }
 
 export const ColumnHeader = ({
@@ -21,7 +19,6 @@ export const ColumnHeader = ({
   onCollapse,
   onRename,
   onDelete,
-  dragHandleProps,
 }: ColumnHeaderProps) => {
   const menuItems: MenuProps["items"] = [
     {
@@ -45,7 +42,7 @@ export const ColumnHeader = ({
 
   return (
     <div className={styles.header}>
-      <div className={styles.title} {...dragHandleProps}>
+      <div className={styles.title}>
         <h2>{title}</h2>
       </div>
       <div className={styles.actions}>
